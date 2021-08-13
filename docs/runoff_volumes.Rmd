@@ -1,0 +1,71 @@
+---
+title: "runoff_volumes"
+author: "Juliet"
+date: "8/13/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(here)
+library(devtools)
+source(here("src", "storm_runoff.R"))
+```
+
+# task 1
+
+```{r}
+runoff_predictions <- predict_runoff(seq(from = 0.6, to = 0.8, by = 0.01), 182)
+```
+
+```{r}
+runoff_df <- data.frame(Impervious_fractions = (seq(from = 0.6, to = 0.8, by = 0.01)),
+                        Predicted_runoff = runoff_predictions)
+
+runoff_df
+
+runoff_plot <- ggplot(data = runoff_df, aes(x = Impervious_fractions, y = Predicted_runoff)) +
+  geom_point() +
+  geom_line() +
+  labs(x = "Degree of Imperviousness (percent cover of watershed area)",
+        y= "Predicted Runoff (ft^3",
+       title = "Storm Runoff as a Function of Impervious Cover")
+
+runoff_plot
+
+ggsave(here("runoff_volume.png", plot = runoff_plot)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
