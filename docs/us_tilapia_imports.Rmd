@@ -1,0 +1,73 @@
+---
+title: "us_tilapia_imports"
+author: "Juliet"
+date: "8/13/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(here)
+library(janitor)
+```
+
+# task 2
+
+```{r}
+tilapia_data <- read_csv(here("data", "us_tilapia_imports.csv"))
+
+#summary(tilapia_data)
+
+tilapia_data_long <- pivot_longer(tilapia_data, cols = "1992":"2018", names_to = "year", values_to = "fish_quantity")
+```
+
+```{r}
+class(tilapia_data_long$year)
+
+```
+
+```{r}
+tilapia_data_long_num <- tilapia_data_long %>%
+  mutate(year = as.numeric(year))
+
+class(tilapia_data_long_num$year)
+```
+
+```{r}
+yearly_tilapia_tot <- tilapia_data_long_num %>%  dplyr::group_by(year) %>% 
+  summarise(fish_sum = sum(fish_quantity, na.rm = TRUE))
+
+```
+
+
+```{r}
+yearly_tilapia_tot_plot <- ggplot(data = yearly_tilapia_tot, aes(x = year, y = fish_sum)) +
+  geom_line() +
+  labs(x = "Year",
+       y = "Total Fish",
+       title = "Total Fish Caught by Year")
+
+
+yearly_tilapia_tot_plot
+
+ggsave(here("figs", "yearly_tilapia_tot_plot.png"), plot = yearly_tilapia_tot_plot)
+```
+
+```{r}
+imports <- tilapia_data_long_num %>% 
+  filter(country %in% c("Ecuador", "Honduras", "Costa Rica", "Mexico"))
+  
+
+ggplot(data = imports, aes(x = year, y = fish_quantity)) +
+  geom_point(aes(color = country)) +
+  theme_dark() +
+  labs(x = "Year",
+       y = "Fish Quantity",
+       title = "Fish Quantities by Country")
+
+ggsave(here("figs", "imports_from_countries.png"), plot = yearly_tilapia_tot_plot)
+```
+
+
+

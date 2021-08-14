@@ -34,7 +34,7 @@ runoff_plot <- ggplot(data = runoff_df, aes(x = Impervious_fractions, y = Predic
 
 runoff_plot
 
-ggsave(here("runoff_volume.png", plot = runoff_plot)
+ggsave(here("figs", "runoff_volume.png"), plot = runoff_plot)
 
 ```
 
